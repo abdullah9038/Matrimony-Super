@@ -1,0 +1,38 @@
+name: Flutter CI - Build APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧭 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧰 Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🧱 Build debug APK
+        run: flutter build apk --debug
+
+      - name: 🚀 Build release APK
+        run: flutter build apk --release
+
+      - name: 📤 Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Matrimony-Super-APKs
+          path: build/app/outputs/flutter-apk/*.apk
+
